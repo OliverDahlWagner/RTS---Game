@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://mucaed5fle4r"]
+
+[ext_resource type="Script" uid="uid://bbtb1wf5sm7i0" path="res://Scripts/Player.gd" id="1_7bfrx"]
+[ext_resource type="Script" uid="uid://ydag3fec2ckj" path="res://Scripts/Camera.gd" id="2_obqw7"]
+
+[node name="Player" type="Node2D"]
+script = ExtResource("1_7bfrx")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+script = ExtResource("2_obqw7")
+
+[connection signal="set_select_highlight" from="." to="." method="_on_set_select_highlight"]
+[connection signal="click_event" from="Camera2D" to="." method="_on_click_event"]

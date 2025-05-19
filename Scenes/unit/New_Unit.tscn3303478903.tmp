@@ -1,0 +1,94 @@
+[gd_scene load_steps=13 format=3 uid="uid://dbjsq2de56rr4"]
+
+[ext_resource type="Texture2D" uid="uid://0tqxbdf81u7s" path="res://Assets/sprites/Highlight.png" id="1_as2er"]
+[ext_resource type="Script" uid="uid://bjsp3wriwk6f7" path="res://Scripts/unit scripts/Unit_Script.gd" id="1_ow51m"]
+[ext_resource type="Texture2D" uid="uid://bq1obmukrv18b" path="res://Assets/NPC/Tiny RPG Character Asset Pack v1.03 -Free Soldier&Orc/Characters(100x100)/Soldier/Soldier/Soldier-Idle.png" id="1_yt4i0"]
+[ext_resource type="PackedScene" uid="uid://rdo7j4b7upml" path="res://Scenes/unit/unit parts/unit_hit_range.tscn" id="4_ow51m"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_as2er"]
+atlas = ExtResource("1_yt4i0")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0m0hy"]
+atlas = ExtResource("1_yt4i0")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ow51m"]
+atlas = ExtResource("1_yt4i0")
+region = Rect2(200, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b04y8"]
+atlas = ExtResource("1_yt4i0")
+region = Rect2(300, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5o3tu"]
+atlas = ExtResource("1_yt4i0")
+region = Rect2(400, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0jqvq"]
+atlas = ExtResource("1_yt4i0")
+region = Rect2(500, 0, 100, 100)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_068tf"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_as2er")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0m0hy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ow51m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b04y8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5o3tu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0jqvq")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_yt4i0"]
+radius = 11.0
+
+[node name="Unit_Main" type="CharacterBody2D" groups=["Player_Unit"]]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_ow51m")
+
+[node name="Unit_Highlight" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(-1, -2.5)
+scale = Vector2(1, 1.15)
+texture = ExtResource("1_as2er")
+
+[node name="Unit_Ani_Sprite" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_068tf")
+animation = &"Idle"
+autoplay = "Idle"
+frame_progress = 0.499439
+
+[node name="Unit_movement_collision" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_yt4i0")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_desired_distance = 5.0
+target_desired_distance = 5.0
+path_max_distance = 50.0
+path_postprocessing = 1
+avoidance_enabled = true
+debug_enabled = true
+debug_use_custom = true
+debug_path_custom_color = Color(1, 0.027451, 0, 1)
+
+[node name="Hit_Range" parent="." instance=ExtResource("4_ow51m")]
+
+[connection signal="velocity_computed" from="NavigationAgent2D" to="." method="_on_navigation_agent_2d_velocity_computed"]
+[connection signal="target_list_updated" from="Hit_Range" to="." method="_on_hit_range_target_list_updated"]
