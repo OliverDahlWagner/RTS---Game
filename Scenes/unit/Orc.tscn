@@ -1,0 +1,126 @@
+[gd_scene load_steps=15 format=3 uid="uid://b4rgb1owrayfu"]
+
+[ext_resource type="Script" uid="uid://blk8j1c6wuif8" path="res://Scripts/unit scripts/Unit_movement.gd" id="1_gtjom"]
+[ext_resource type="Texture2D" uid="uid://0tqxbdf81u7s" path="res://Assets/sprites/Highlight.png" id="2_yx8qh"]
+[ext_resource type="Texture2D" uid="uid://bl00ql81j5wys" path="res://Assets/NPC/Tiny RPG Character Asset Pack v1.03 -Free Soldier&Orc/Characters(100x100)/Orc/Orc/Orc-Idle.png" id="3_d8bev"]
+[ext_resource type="Script" uid="uid://datk12fktnss7" path="res://Scripts/unit scripts/unit.gd" id="4_soyge"]
+[ext_resource type="Script" uid="uid://cvose0ulnqdnr" path="res://Scripts/unit scripts/Hit_Range.gd" id="5_tnsgv"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_x5ip0"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x5ip0"]
+atlas = ExtResource("3_d8bev")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jxi84"]
+atlas = ExtResource("3_d8bev")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0sg4p"]
+atlas = ExtResource("3_d8bev")
+region = Rect2(200, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7lsgs"]
+atlas = ExtResource("3_d8bev")
+region = Rect2(300, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o1uuh"]
+atlas = ExtResource("3_d8bev")
+region = Rect2(400, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0irho"]
+atlas = ExtResource("3_d8bev")
+region = Rect2(500, 0, 100, 100)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_n3quc"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x5ip0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jxi84")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0sg4p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7lsgs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o1uuh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0irho")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6syi6"]
+radius = 32.0
+
+[node name="Base_Orc" type="CharacterBody2D" groups=["Enemy_Unit"]]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_gtjom")
+
+[node name="Highlight" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(2.38419e-07, -1)
+scale = Vector2(0.9, 0.9)
+texture = ExtResource("2_yx8qh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_x5ip0")
+debug_color = Color(0.129412, 0.945098, 0, 0.717647)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_n3quc")
+animation = &"Idle"
+autoplay = "Idle"
+frame_progress = 0.72521
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_desired_distance = 5.0
+target_desired_distance = 5.0
+path_max_distance = 50.0
+path_postprocessing = 1
+avoidance_enabled = true
+debug_use_custom = true
+debug_path_custom_color = Color(1, 0.027451, 0, 1)
+
+[node name="unit_data" type="Node" parent="."]
+script = ExtResource("4_soyge")
+attack_timer = 1.5
+
+[node name="Hit_Range" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("5_tnsgv")
+
+[node name="Hit_Range_Shape" type="CollisionShape2D" parent="Hit_Range"]
+shape = SubResource("CircleShape2D_6syi6")
+debug_color = Color(0.875039, 0.282257, 0.512525, 0.42)
+
+[node name="Label" type="Label" parent="."]
+offset_left = -10.0
+offset_top = -23.0
+offset_right = 2790.0
+offset_bottom = 1379.0
+scale = Vector2(0.007, 0.007)
+theme_override_constants/outline_size = 515
+theme_override_font_sizes/font_size = 1029
+text = "1000"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 1.5
+autostart = true
+
+[connection signal="velocity_computed" from="NavigationAgent2D" to="." method="_on_navigation_agent_2d_velocity_computed"]
+[connection signal="body_entered" from="Hit_Range" to="unit_data" method="_on_hit_range_body_entered"]
+[connection signal="body_exited" from="Hit_Range" to="unit_data" method="_on_hit_range_body_exited"]
+[connection signal="timeout" from="Timer" to="unit_data" method="_on_timer_timeout"]

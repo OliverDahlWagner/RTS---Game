@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://rdo7j4b7upml"]
+
+[ext_resource type="Script" uid="uid://cvose0ulnqdnr" path="res://Scripts/unit scripts/Hit_Range.gd" id="1_v11ex"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6syi6"]
+radius = 32.0
+
+[node name="Hit_Range" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_v11ex")
+
+[node name="Hit_Range_Shape" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_6syi6")
+debug_color = Color(0.875039, 0.282257, 0.512525, 0.42)

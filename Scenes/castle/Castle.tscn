@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3 uid="uid://c6pww7plegiis"]
+
+[ext_resource type="Texture2D" uid="uid://c0prarc75cecm" path="res://Assets/sprites/slime_purple.png" id="1_1ldp2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vyk2b"]
+atlas = ExtResource("1_1ldp2")
+region = Rect2(0, 24, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gnf7g"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vyk2b")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1ldp2"]
+
+[node name="Castle" type="Node2D" groups=["Castle"]]
+scale = Vector2(5, 5)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -6)
+sprite_frames = SubResource("SpriteFrames_gnf7g")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_1ldp2")
